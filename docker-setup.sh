@@ -41,6 +41,11 @@ if [ -n "$MTP_RELAY_DOMAINS" ]; then
   postconf -e "relay_domains = $MTP_RELAY_DOMAINS"
 fi
 
+if [ -n "$MTP_REPLY_TO" ]; then
+  echo "/$MTP_REPLY_TO_COND/  PREPEND Reply-To: <$MTP_REPLY_TO>" >> /etc/postfix/header_checks.pcre
+  postconf -e "smtp_header_checks = pcre:/etc/postfix/header_checks.pcre"
+fi
+
 if [ ! -z "$MTP_RELAY" -a ! -z "$MTP_PORT" -a ! -z "$MTP_USER" -a ! -z "$MTP_PASS" ]; then
     setup_conf_and_secret
 else
